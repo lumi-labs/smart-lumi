@@ -19,7 +19,7 @@ type Relay struct {
 }
 
 func (r *Relay) Name() string {
-	return "basic"
+	return "community"
 }
 
 func (r *Relay) Storage() relayer.Storage {

@@ -34,7 +34,15 @@ func Start(relay Relay) error {
 // StartConf creates a new Server, passing it host:port for the address,
 // and starts serving propagating any error returned from [Server.Start].
 func StartConf(s Settings, relay Relay) error {
-	addr := net.JoinHostPort(s.Host, s.Port)
+	port := s.Port
+	if relay.Name() == "community" {
+		port = "7448"
+	}
+	if relay.Name() == "garden" {
+		port = "7449"
+	}
+
+	addr := net.JoinHostPort(s.Host, port)
 	srv := NewServer(addr, relay)
 	return srv.Start()
 }
@@ -98,6 +106,9 @@ func (s *Server) Router() *mux.Router {
 // is called.
 func (s *Server) Addr() string {
 	return s.addr
+}
+func (s *Server) GetRelay() Relay {
+	return s.relay
 }
 
 // ServeHTTP implements http.Handler interface.
